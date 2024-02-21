@@ -44,10 +44,13 @@
   retries: 20
   delay: 30
 
+- name: Run rhsi cli commands (0)
+  ansible.builtin.shell: "curl https://skupper.io/install.sh | sh"
+
 - name: Run rhsi cli commands (1)
   ansible.builtin.command:
     argv:
-      - skupper
+      - "{{ansible_env.HOME}}/.local/bin/skupper"
       - init
       - -n
       - "{{ ocp4_workload_cloud_architecture_workshop_namespace_prefix }}-user1"
@@ -59,7 +62,7 @@
 - name: Run rhsi cli commands (2)
   ansible.builtin.command:
     argv:
-      - skupper
+      - "{{ansible_env.HOME}}/.local/bin/skupper"
       - init
       - -n
       - "{{ ocp4_workload_cloud_architecture_workshop_module_rhsi_db_namespace_prefix }}-user1"
@@ -67,7 +70,7 @@
 - name: Run rhsi cli commands (3)
   ansible.builtin.command:
     argv:
-      - skupper
+      - "{{ansible_env.HOME}}/.local/bin/skupper"
       - token
       - create
       - -n
@@ -77,19 +80,21 @@
 - name: Run rhsi cli commands (4)
   ansible.builtin.command:
     argv:
-      - skupper
+      - "{{ansible_env.HOME}}/.local/bin/skupper"
       - link
       - create
       - -n
       - "{{ ocp4_workload_cloud_architecture_workshop_module_rhsi_db_namespace_prefix }}-user1"
       - /tmp/skupper.token
+  ignore_errors: true
 
 - name: Run rhsi cli commands (5)
   ansible.builtin.command:
     argv:
-      - skupper
+      - "{{ansible_env.HOME}}/.local/bin/skupper"
       - expose
       - deployment/globex-db
       - --port=5432
       - -n
       - "{{ ocp4_workload_cloud_architecture_workshop_module_rhsi_db_namespace_prefix }}-user1"
+  ignore_errors: true
